@@ -1,0 +1,8 @@
+echo Creating release file structure
+mkdir -p GameData/PlanetInfoPlus
+cp ../files/changelog.txt GameData/PlanetInfoPlus
+cp ../files/*.cfg GameData/PlanetInfoPlus
+cp ../LICENSE GameData/PlanetInfoPlus
+cp ../README.md GameData/PlanetInfoPlus
+cp ../src/bin/Release/PlanetInfoPlus.dll GameData/PlanetInfoPlus
+echo Done.
