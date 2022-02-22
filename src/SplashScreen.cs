@@ -10,7 +10,16 @@ namespace PlanetInfoPlus
 
         private static readonly string[] NEW_TIPS =
         {
-            "Displaying Better Planet Info..."
+            "Displaying Better Planet Info...",
+            "Finding Highest Peak..."
+        };
+
+        /// <summary>
+        /// Snark's sneaky little way of thanking various users of this mod for helpful contributions.
+        /// </summary>
+        private static readonly string[] THANK_USERS =
+        {
+            "Poodmund"    // for providing useful reference to finding highest peak on a planet
         };
 
         internal void Awake()
@@ -50,6 +59,12 @@ namespace PlanetInfoPlus
             List<string> tipsList = new List<string>();
             tipsList.AddRange(state.tips);
             tipsList.AddRange(NEW_TIPS);
+            int numThanks = 1 + (int)Mathf.Sqrt(THANK_USERS.Length);
+            System.Random random = new System.Random(System.DateTime.UtcNow.Second);
+            for (int i = 0; i < numThanks; ++i)
+            {
+                tipsList.Add(string.Format("Thanking {0}...", THANK_USERS[random.Next(THANK_USERS.Length)]));
+            }
             state.tips = tipsList.ToArray();
         }
     }

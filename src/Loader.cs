@@ -19,6 +19,10 @@ namespace PlanetInfoPlus
         public void Start()
         {
             UrlDir.UrlConfig[] configs = GameDatabase.Instance.GetConfigs(MASTER_NODE_NAME);
+            if ((configs == null) || (configs.Length == 0)) {
+                Logging.Error("No " + MASTER_NODE_NAME + " config found. Default values will be used.");
+                return;
+            }
             ProcessMasterNode(configs[0].config);
         }
 

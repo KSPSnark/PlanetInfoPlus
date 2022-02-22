@@ -41,9 +41,11 @@ namespace PlanetInfoPlus
         public static readonly string NO = Localizer.Format("#autoLOC_439856");
 
         // PlanetInfoPlus terms
+        public static readonly string MAX_ELEVATION = Localizer.Format(Tags.MAX_ELEVATION);
         public static readonly string SYNCHRONOUS_ALTITUDE = Localizer.Format(Tags.SYNCHRONOUS_ALTITUDE);
         public static readonly string ORBITAL_PERIOD = Localizer.Format(Tags.ORBITAL_PERIOD);
         public static readonly string LOCKED_ROTATION = Localizer.Format("#PlanetInfoPlus_lockedRotation");
+        public static readonly string RETROGRADE_ROTATION = Localizer.Format("#PlanetInfoPlus_retrogradeRotation");
         public static readonly string LOCKED = Localizer.Format("#PlanetInfoPlus_locked");
         public static readonly string NOT_APPLICABLE = Localizer.Format("#PlanetInfoPlus_notApplicable");
         public static readonly string OXYGENATED = Localizer.Format("#PlanetInfoPlus_oxygenated");
@@ -74,6 +76,7 @@ namespace PlanetInfoPlus
             // PlanetInfoPlus tags
             public const string PHYSICAL_SETTINGS_LABEL = "#PlanetInfoPlus_physicalSettingsLabel";
             public const string ATMOSPHERIC_SETTINGS_LABEL = "#PlanetInfoPlus_atmosphericSettingsLabel";
+            public const string MAX_ELEVATION = "#PlanetInfoPlus_maxElevation";
             public const string SYNCHRONOUS_ALTITUDE = "#PlanetInfoPlus_synchronousAltitude";
             public const string ORBITAL_PERIOD = "#PlanetInfoPlus_orbitalPeriod";
         }

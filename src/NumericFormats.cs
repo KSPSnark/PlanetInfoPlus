@@ -13,6 +13,7 @@
         public static readonly NumberLocalizer Gravity             = new NumberLocalizer("Gravity");
         public static readonly NumberLocalizer EscapeVelocity      = new NumberLocalizer("EscapeVelocity");
         public static readonly NumberLocalizer SOI                 = new NumberLocalizer("SoiKm");
+        public static readonly NumberLocalizer MaxElevation        = new NumberLocalizer("MaxElevationM");
         public static readonly NumberLocalizer SynchronousAltitude = new NumberLocalizer("SynchronousAltitudeKm");
         public static readonly NumberLocalizer AtmosphereHeight    = new NumberLocalizer("AtmosphereHeightM");
         public static readonly NumberLocalizer AtmospherePressure  = new NumberLocalizer("AtmospherePressure");
@@ -26,6 +27,7 @@
             Gravity,
             EscapeVelocity,
             SOI,
+            MaxElevation,
             SynchronousAltitude,
             AtmosphereHeight,
             AtmospherePressure,

@@ -1,2 +1,7 @@
+Version 1.1
+* Add "max elevation" field for planets. Thanks to Poodmund for pointing me at a helpful algorithm from SigmaCartographer!
+* Add special handling for retrograde rotation (it's displayed in an attention-catching way).
+
+
 Version 1.0
 * Initial release.

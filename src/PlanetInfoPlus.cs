@@ -95,6 +95,7 @@ namespace PlanetInfoPlus
             if (PhysicalSettings.Instance.showEscapeVelocity)   list.Add(CreateParam_EscapeVelocity(app));
             if (PhysicalSettings.Instance.showRotationPeriod)   list.Add(CreateParam_RotationPeriod(app));
             if (PhysicalSettings.Instance.showSOI)              list.Add(CreateParam_SOI(app));
+            if (PhysicalSettings.Instance.showMaxElevation)     list.Add(CreateParam_MaxElevation(app));
             if (PhysicalSettings.Instance.showSynchronousAltitude && app.currentBody.hasSolidSurface)
                 list.Add(CreateParam_SynchronousAltitude(app));
             if (PhysicalSettings.Instance.showOrbitalPeriod && app.currentBody.HasOrbit())
@@ -186,14 +187,23 @@ namespace PlanetInfoPlus
                 Strings.ROTATION_PERIOD,
                 Strings.LOCKED);
 
+            // Special handling for bodies with retrograde rotation.
+            if (app.currentBody.rotationPeriod < 0)
+            {
+                return CreateBody(
+                    app.cascadingList,
+                    InfoColors.Attention,
+                    Strings.RETROGRADE_ROTATION,
+                    KSPUtil.PrintTime(-app.currentBody.rotationPeriod, 3, false));
+            }
+
             // Either it's not tidally locked, or we're not showing the orbital period.
             // If the former, just display normally.  If the latter, show it with the
             // description "locked rotation" to make it clear that it's a tidally locked body.
-            string rotationTime = KSPUtil.PrintTime(app.currentBody.rotationPeriod, 3, false);
             return CreateBody(
                 app.cascadingList,
                 app.currentBody.tidallyLocked ? Strings.LOCKED_ROTATION : Strings.ROTATION_PERIOD,
-                rotationTime);
+                KSPUtil.PrintTime(app.currentBody.rotationPeriod, 3, false));
         }
 
         private static UIListItem CreateParam_SOI(KbApp_PlanetParameters app)
@@ -203,6 +213,15 @@ namespace PlanetInfoPlus
                 Strings.SOI,
                 NumericFormats.SOI.Localize(0.001 * app.currentBody.sphereOfInfluence)
                     + " " + Strings.KM);
+        }
+
+        private static UIListItem CreateParam_MaxElevation(KbApp_PlanetParameters app)
+        {
+            return CreateBody(
+                app.cascadingList,
+                Strings.MAX_ELEVATION,
+                NumericFormats.MaxElevation.Localize(app.currentBody.MaxElevation())
+                    + " " + Strings.M);
         }
 
         private static UIListItem CreateParam_SynchronousAltitude(KbApp_PlanetParameters app)

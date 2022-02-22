@@ -33,5 +33,16 @@ namespace PlanetInfoPlus
             if (radius > body.sphereOfInfluence) return double.NaN;
             return radius - body.Radius;
         }
+
+        /// <summary>
+        /// Get the elevation of the highest peak on the planet. Returns NaN if the
+        /// planet has no surface.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static double MaxElevation(this CelestialBody body)
+        {
+            return CelestialBodyElevationScanner.GetMaxElevation(body);
+        }
     }
 }

@@ -10,11 +10,13 @@
 
         public static readonly Colorizer Default = new Colorizer("Default");
         public static readonly Colorizer Highlight = new Colorizer("Highlight");
+        public static readonly Colorizer Attention = new Colorizer("Attention");
 
         private static readonly Colorizer[] colorizers =
         {
             Default,
-            Highlight
+            Highlight,
+            Attention
         };
 
         /// <summary>

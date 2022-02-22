@@ -55,6 +55,9 @@
         [GameParameters.CustomParameterUI(Strings.Tags.SOI)]
         public bool showSOI = true;
 
+        [GameParameters.CustomParameterUI(Strings.Tags.MAX_ELEVATION)]
+        public bool showMaxElevation = true;
+
         [GameParameters.CustomParameterUI(Strings.Tags.SYNCHRONOUS_ALTITUDE)]
         public bool showSynchronousAltitude = true;
 
