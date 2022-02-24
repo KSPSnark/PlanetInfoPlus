@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// User settings for this mod, accessible through the settings menu for the game.
-    /// 
+    ///
     /// Invaliable advice about how to make this work can be found here:
     /// https://forum.kerbalspaceprogram.com/index.php?/topic/147576-modders-notes-for-ksp-12/
     /// </summary>

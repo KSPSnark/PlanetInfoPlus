@@ -19,7 +19,10 @@ namespace PlanetInfoPlus
         public static readonly string SOI = Localizer.Format(Tags.SOI);
 
         // Parameter names (atmospheric)
-        public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = InfoColors.Colorize(Localizer.Format(Tags.ATMOSPHERE_CHARACTERISTICS_HEADER), "#27e174");
+        public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER_LONG = Localizer.Format(Tags.ATMOSPHERE_CHARACTERISTICS_HEADER_LONG);
+        public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = InfoColors.Colorize(
+            Localizer.Format(Tags.ATMOSPHERE_CHARACTERISTICS_HEADER),
+            InfoColors.ColorOf(ATMOSPHERE_CHARACTERISTICS_HEADER_LONG));
         public static readonly string ATMOSPHERE_PRESENT = Localizer.Format(Tags.ATMOSPHERE_PRESENT);
         public static readonly string ATMOSPHERE_HEIGHT = Localizer.Format(Tags.ATMOSPHERE_HEIGHT);
         public static readonly string ATMOSPHERE_PRESSURE = Localizer.Format(Tags.ATMOSPHERE_PRESSURE);
@@ -39,6 +42,8 @@ namespace PlanetInfoPlus
         // Misc
         public static readonly string YES = Localizer.Format("#autoLOC_439855");
         public static readonly string NO = Localizer.Format("#autoLOC_439856");
+        public static readonly string NONE = Localizer.Format("#autoLOC_6003000");
+        public static readonly string NOT_APPLICABLE = Localizer.Format("#autoLOC_258912");
 
         // PlanetInfoPlus terms
         public static readonly string MAX_ELEVATION = Localizer.Format(Tags.MAX_ELEVATION);
@@ -47,8 +52,25 @@ namespace PlanetInfoPlus
         public static readonly string LOCKED_ROTATION = Localizer.Format("#PlanetInfoPlus_lockedRotation");
         public static readonly string RETROGRADE_ROTATION = Localizer.Format("#PlanetInfoPlus_retrogradeRotation");
         public static readonly string LOCKED = Localizer.Format("#PlanetInfoPlus_locked");
-        public static readonly string NOT_APPLICABLE = Localizer.Format("#PlanetInfoPlus_notApplicable");
         public static readonly string OXYGENATED = Localizer.Format("#PlanetInfoPlus_oxygenated");
+        public static readonly string GAMEPLAY_CHARACTERISTICS_HEADER = Localizer.Format("#PlanetInfoPlus_gameplayHeader");
+        public static readonly string UPPER_ATMOSPHERE_HEIGHT = Localizer.Format(Tags.UPPER_ATMOSPHERE_HEIGHT);
+        public static readonly string NEAR_SPACE_HEIGHT = Localizer.Format(Tags.NEAR_SPACE_HEIGHT);
+        public static readonly string BIOME_COUNT = Localizer.Format(Tags.BIOME_COUNT);
+        public static readonly string EXPLORATION = Localizer.Format(Tags.EXPLORATION);
+        public static readonly string PROGRESS_PLANTED_FLAG = Localizer.Format("#PlanetInfoPlus_plantedFlag");
+        public static readonly string PROGRESS_LANDING_CREWED = Localizer.Format("#PlanetInfoPlus_landingCrewed");
+        public static readonly string PROGRESS_SPLASHDOWN_CREWED = Localizer.Format("#PlanetInfoPlus_splashDownCrewed");
+        public static readonly string PROGRESS_LANDING = Localizer.Format("#PlanetInfoPlus_landing");
+        public static readonly string PROGRESS_SPLASHDOWN = Localizer.Format("#PlanetInfoPlus_splashDown");
+        public static readonly string PROGRESS_ORBIT_CREWED = Localizer.Format("#PlanetInfoPlus_orbitCrewed");
+        public static readonly string PROGRESS_ORBIT = Localizer.Format("#PlanetInfoPlus_orbit");
+        public static readonly string PROGRESS_FLYBY_CREWED = Localizer.Format("#PlanetInfoPlus_flybyCrewed");
+        public static readonly string PROGRESS_FLYBY = Localizer.Format("#PlanetInfoPlus_flyby");
+        public static readonly string PROGRESS_SUBORBIT_CREWED = Localizer.Format("#PlanetInfoPlus_suborbitCrewed");
+        public static readonly string PROGRESS_SUBORBIT = Localizer.Format("#PlanetInfoPlus_suborbit");
+        public static readonly string PROGRESS_FLIGHT_CREWED = Localizer.Format("#PlanetInfoPlus_flightCrewed");
+        public static readonly string PROGRESS_FLIGHT = Localizer.Format("#PlanetInfoPlus_flightCrewed");
 
         /// <summary>
         /// The raw localizer tags.
@@ -56,7 +78,7 @@ namespace PlanetInfoPlus
         public static class Tags
         {
             // Parameter names (physical)
-            public const string PHYSICAL_CHARACTERISTICS_HEADER = "#autoLOC_462403";
+            public const string PHYSICAL_CHARACTERISTICS_HEADER = "#autoLOC_462403"; // is colorized
             public const string EQ_RADIUS = "#autoLOC_462417";
             public const string AREA = "#autoLOC_462420";
             public const string MASS = "#autoLOC_462423";
@@ -67,10 +89,11 @@ namespace PlanetInfoPlus
             public const string SOI = "#autoLOC_462438";
 
             // Parameter names (atmospheric
-            public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = "#autoLOC_8003223"; // need to colorize this though
+            public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER_LONG = "#autoLOC_462406"; // is colorized
+            public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = "#autoLOC_8003223";
             // A note about ATMOSPHERE_CHARACTERISTICS_HEADER, above. The actual tag that
-            // stock KSP uses for this is #autoLOC_462406, which in English is rendered
-            // as "Atmospheric Characteristics:".  However, that's long enough that it word-wraps
+            // stock KSP uses for this is the long one, which in English is rendered as
+            // "Atmospheric Characteristics:".  However, that's long enough that it word-wraps
             // in the header in the window, which wastes vertical real estate. Therefore, I've
             // swapped it for this value, which is rendered as "Atmosphere:" and fits better.
             // If I ever figure out how to widen the app window a bit, I may switch it back again.
@@ -82,9 +105,14 @@ namespace PlanetInfoPlus
             // PlanetInfoPlus tags
             public const string PHYSICAL_SETTINGS_LABEL = "#PlanetInfoPlus_physicalSettingsLabel";
             public const string ATMOSPHERIC_SETTINGS_LABEL = "#PlanetInfoPlus_atmosphericSettingsLabel";
+            public const string GAMEPLAY_SETTINGS_LABEL = "#PlanetInfoPlus_gameplaySettingsLabel";
             public const string MAX_ELEVATION = "#PlanetInfoPlus_maxElevation";
             public const string SYNCHRONOUS_ALTITUDE = "#PlanetInfoPlus_synchronousAltitude";
             public const string ORBITAL_PERIOD = "#PlanetInfoPlus_orbitalPeriod";
+            public const string UPPER_ATMOSPHERE_HEIGHT = "#PlanetInfoPlus_upperAtmosphereHeight";
+            public const string NEAR_SPACE_HEIGHT = "#PlanetInfoPlus_nearSpaceHeight";
+            public const string BIOME_COUNT = "#PlanetInfoPlus_biomeCount";
+            public const string EXPLORATION = "#PlanetInfoPlus_exploration";
         }
     }
 }

@@ -2,14 +2,14 @@
 {
     /// <summary>
     /// User settings for this mod, accessible through the settings menu for the game.
-    /// 
+    ///
     /// Invaliable advice about how to make this work can be found here:
     /// https://forum.kerbalspaceprogram.com/index.php?/topic/147576-modders-notes-for-ksp-12/
     /// </summary>
     internal class AtmosphericSettings : GameParameters.CustomParameterNode
     {
         // GameParameters.CustomParameterNode boilerplate
-        public override string Title => Strings.ATMOSPHERE_CHARACTERISTICS_HEADER;
+        public override string Title => Strings.ATMOSPHERE_CHARACTERISTICS_HEADER_LONG;
         public override string DisplaySection => PlanetInfoPlus.MOD_NAME;
         public override string Section => PlanetInfoPlus.MOD_NAME;
         public override int SectionOrder => 2;

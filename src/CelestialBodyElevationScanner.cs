@@ -204,13 +204,21 @@ namespace PlanetInfoPlus
         private static int HomeworldMoonComparison(CelestialBody b1, CelestialBody b2) => HomeworldComparison(b1.referenceBody, b2.referenceBody);
 
         /// <summary>
+        /// Prioritize the homeworld's parent body over others.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int HomeworldParentComparison(CelestialBody b1, CelestialBody b2) => b2.IsHomeworldParent().CompareTo(b1.IsHomeworldParent());
+
+        /// <summary>
         /// Prioritize homeworld siblings (planets orbiting the same primary as the homeworld) over others.
         /// Only really matters for modded solar systems, where the homeworld might be a moon of some planet.
         /// </summary>
         /// <param name="b1"></param>
         /// <param name="b2"></param>
         /// <returns></returns>
-        private static int SiblingComparison(CelestialBody b1, CelestialBody b2) => b2.IsHomeworldSibling().CompareTo(b1.IsHomeworldSibling());
+        private static int HomeworldSiblingComparison(CelestialBody b1, CelestialBody b2) => b2.IsHomeworldSibling().CompareTo(b1.IsHomeworldSibling());
 
         /// <summary>
         /// Prioritize planets over moons.
@@ -259,7 +267,8 @@ namespace PlanetInfoPlus
             private static readonly Comparison[] comparisons = {
                 HomeworldComparison,
                 HomeworldMoonComparison,
-                SiblingComparison,
+                HomeworldParentComparison,
+                HomeworldSiblingComparison,
                 HierarchyComparison,
                 MoonParentComparison,
                 SmaComparison,

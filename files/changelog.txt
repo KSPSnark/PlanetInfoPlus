@@ -1,3 +1,7 @@
+Version 1.3
+* Add "Gameplay" section to info panel. Includes upper atmosphere height, high/low space boundary, biome count, and exploration status.
+
+
 Version 1.2
 * Add some clever pre-calculation routines to substantially reduce momentary freezes in the planetarium view.
 * Add Kopernicus compatibility patch to handle certain edge cases. Thanks to R-T-B for tracking this down.

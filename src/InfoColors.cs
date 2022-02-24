@@ -1,4 +1,6 @@
-﻿namespace PlanetInfoPlus
+﻿using System.Text.RegularExpressions;
+
+namespace PlanetInfoPlus
 {
     /// <summary>
     /// Color values loaded from the config file.
@@ -12,6 +14,7 @@
         public static readonly Colorizer Highlight = new Colorizer("Highlight");
         public static readonly Colorizer Attention = new Colorizer("Attention");
 
+        private static readonly Regex colorPattern = new Regex("<color=(#[0-9a-fA-F]+)>", RegexOptions.Compiled);
         private static readonly Colorizer[] colorizers =
         {
             Default,
@@ -54,9 +57,29 @@
             }
         }
 
+        /// <summary>
+        /// Given a text string, apply HTML color tags to it.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public static string Colorize(string text, string color)
         {
             return (string.IsNullOrEmpty(color)) ? text : ("<color=" + color + ">" + text + "</color>");
+        }
+
+        /// <summary>
+        /// Given a text string with HTML color tags in it, extract the color.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string ColorOf(string text)
+        {
+            Logging.Log("Examining string for color tags: " + text);
+            Match match = colorPattern.Match(text);
+            if (!match.Success) return null;
+
+            return match.Groups[1].Value;
         }
 
         public class Colorizer

@@ -19,9 +19,11 @@ namespace PlanetInfoPlus
         /// </summary>
         private static readonly string[] THANK_USERS =
         {
-            "Poodmund",   // for providing useful reference to finding highest peak on a planet
-            "R-T-B",      // helpful suggestions for config options (aids mod compatibility, e.g. Principia)
-            "flart"       // bug reports and helpful feature suggestions
+            "Poodmund",    // for providing useful reference to finding highest peak on a planet
+            "R-T-B",       // helpful suggestions for config options (aids mod compatibility, e.g. Principia)
+            "flart",       // bug reports and helpful feature suggestions
+            "caipi",       // reporting JNSQ compatibility bug
+            "Arrowmaster", // feature suggestions (upper atmosphere height, high/low space boundary)
         };
 
         internal void Awake()

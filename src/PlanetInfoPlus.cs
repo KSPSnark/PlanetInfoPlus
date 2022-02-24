@@ -48,6 +48,13 @@ namespace PlanetInfoPlus
             UIListItem atmosphericHeader = app.cascadingList.CreateHeader(Localizer.Format(Strings.ATMOSPHERE_CHARACTERISTICS_HEADER), out button, true);
             app.cascadingList.ruiList.AddCascadingItem(atmosphericHeader, app.cascadingList.CreateFooter(), CreateAtmosphericCharacteristics(app), button);
 
+            // Add the gameplay characteristics section.
+            if (GameplaySettings.Instance.IsAnyActive)
+            {
+                UIListItem gameplayHeader = app.cascadingList.CreateHeader(Localizer.Format(Strings.GAMEPLAY_CHARACTERISTICS_HEADER), out button, true);
+                app.cascadingList.ruiList.AddCascadingItem(gameplayHeader, app.cascadingList.CreateFooter(), CreateGameplayCharacteristics(app), button);
+            }
+
             // Return value appears to be ignored.
             return true;
         }
@@ -120,6 +127,18 @@ namespace PlanetInfoPlus
             if (AtmosphericSettings.Instance.showHeight)      list.Add(CreateParam_AtmosphereHeight(app));
             if (AtmosphericSettings.Instance.showPressure)    list.Add(CreateParam_AtmospherePressure(app));
             if (AtmosphericSettings.Instance.showTemperature) list.Add(CreateParam_AtmosphereTemperature(app));
+
+            return list;
+        }
+
+        private static List<UIListItem> CreateGameplayCharacteristics(KbApp_PlanetParameters app)
+        {
+            List<UIListItem> list = new List<UIListItem>();
+            if (GameplaySettings.Instance.showUpperAtmosphereHeight && app.currentBody.atmosphere)
+                list.Add(CreateParam_UpperAtmosphereHeight(app));
+            if (GameplaySettings.Instance.showNearSpaceHight) list.Add(CreateParam_NearSpaceHeight(app));
+            if (GameplaySettings.Instance.showBiomeCount)     list.Add(CreateParam_BiomeCount(app));
+            if (GameplaySettings.Instance.showExploration)    list.Add(CreateParam_Exploration(app));
 
             return list;
         }
@@ -305,6 +324,44 @@ namespace PlanetInfoPlus
                 Strings.ATMOSPHERE_ASL_TEMP,
                 NumericFormats.Temperature.Localize(app.currentBody.atmosphereTemperatureSeaLevel)
                     + " " + Strings.K);
+        }
+
+
+        //===================== GAMEPLAY CHARACTERISTICS PARAMETERS ===============================
+
+        private static UIListItem CreateParam_UpperAtmosphereHeight(KbApp_PlanetParameters app)
+        {
+            return CreateBody(
+                app.cascadingList,
+                Strings.UPPER_ATMOSPHERE_HEIGHT,
+                NumericFormats.AtmosphereHeight.Localize(app.currentBody.scienceValues.flyingAltitudeThreshold)
+                    + " " + Strings.M);
+        }
+
+        private static UIListItem CreateParam_NearSpaceHeight(KbApp_PlanetParameters app)
+        {
+            return CreateBody(
+                app.cascadingList,
+                Strings.NEAR_SPACE_HEIGHT,
+                NumericFormats.NearSpaceHeight.Localize(app.currentBody.scienceValues.spaceAltitudeThreshold)
+                    + " " + Strings.KM);
+        }
+
+        private static UIListItem CreateParam_BiomeCount(KbApp_PlanetParameters app)
+        {
+            int numBiomes = app.currentBody.BiomeCount();
+            return CreateBody(
+                app.cascadingList,
+                Strings.BIOME_COUNT,
+                (numBiomes > 0) ? numBiomes.ToString() : Strings.NONE);
+        }
+
+        private static UIListItem CreateParam_Exploration(KbApp_PlanetParameters app)
+        {
+            return CreateBody(
+                app.cascadingList,
+                Strings.EXPLORATION,
+                app.currentBody.ExplorationDescription());
         }
     }
 }

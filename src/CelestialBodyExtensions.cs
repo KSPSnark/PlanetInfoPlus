@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace PlanetInfoPlus
 {
@@ -52,6 +51,16 @@ namespace PlanetInfoPlus
         }
 
         /// <summary>
+        /// Returns true if this is the body that the homeworld orbits.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static bool IsHomeworldParent(this CelestialBody body)
+        {
+            return body.flightGlobalsIndex == FlightGlobals.GetHomeBody().referenceBody.flightGlobalsIndex;
+        }
+
+        /// <summary>
         /// Returns true if this body has the same parent as the homeworld.
         /// </summary>
         /// <param name="body"></param>
@@ -61,7 +70,7 @@ namespace PlanetInfoPlus
             if (body.isHomeWorld) return false;
             if (body.flightGlobalsIndex == body.referenceBody.flightGlobalsIndex) return false; // it's the sun
 
-            return body.referenceBody.flightGlobalsIndex == FlightGlobals.GetHomeBodyIndex();
+            return body.referenceBody.flightGlobalsIndex == FlightGlobals.GetHomeBody().referenceBody.flightGlobalsIndex;
         }
 
         /// <summary>
@@ -84,6 +93,30 @@ namespace PlanetInfoPlus
                 body = body.referenceBody;
             }
             return level;
+        }
+
+        /// <summary>
+        /// Gets the number of biomes for the body. (Does not include "mini-biomes"
+        /// such as the ones around KSC.)
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static int BiomeCount(this CelestialBody body)
+        {
+            if (body.BiomeMap == null) return 0;
+            if (body.BiomeMap.Attributes == null) return 0;
+            return body.BiomeMap.Attributes.Length;
+        }
+
+        /// <summary>
+        /// Describes the most "advanced" exploration of the body yet done.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static string ExplorationDescription(this CelestialBody body)
+        {
+            ExplorationProgress progress = ExplorationProgress.For(body);
+            return (progress == null) ? Strings.NONE : progress.Description;
         }
     }
 }

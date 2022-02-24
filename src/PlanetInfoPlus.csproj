@@ -52,6 +52,8 @@
     <Compile Include="CelestialBodyElevationScanner.cs" />
     <Compile Include="CelestialBodyExtensions.cs" />
     <Compile Include="ConfigSettings.cs" />
+    <Compile Include="ExplorationProgress.cs" />
+    <Compile Include="GameplaySettings.cs" />
     <Compile Include="InfoColors.cs" />
     <Compile Include="KSCBehavior.cs" />
     <Compile Include="Loader.cs" />
