@@ -3,8 +3,8 @@
 namespace PlanetInfoPlus
 {
     /// <summary>
-    /// Runs once when the game hits the main menu on startup. Loads custom config settings
-    /// used in various places.
+    /// Runs once when the game hits the main menu on startup. Does one-time startup
+    /// stuff, such as loading configs.
     /// </summary>
     [KSPAddon(KSPAddon.Startup.MainMenu, true)]
     public class Loader : MonoBehaviour
@@ -34,6 +34,7 @@ namespace PlanetInfoPlus
         {
             TryProcessChildNode(masterNode, NumericFormats.CONFIG_NODE_NAME, NumericFormats.LoadConfig);
             TryProcessChildNode(masterNode, InfoColors.CONFIG_NODE_NAME, InfoColors.LoadConfig);
+            TryProcessChildNode(masterNode, ConfigSettings.CONFIG_NODE_NAME, ConfigSettings.LoadConfig);
         }
 
         /// <summary>

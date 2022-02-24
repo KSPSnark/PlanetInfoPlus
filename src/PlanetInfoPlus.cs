@@ -95,9 +95,11 @@ namespace PlanetInfoPlus
             if (PhysicalSettings.Instance.showEscapeVelocity)   list.Add(CreateParam_EscapeVelocity(app));
             if (PhysicalSettings.Instance.showRotationPeriod)   list.Add(CreateParam_RotationPeriod(app));
             if (PhysicalSettings.Instance.showSOI)              list.Add(CreateParam_SOI(app));
-            if (PhysicalSettings.Instance.showMaxElevation)     list.Add(CreateParam_MaxElevation(app));
-            if (PhysicalSettings.Instance.showSynchronousAltitude && app.currentBody.hasSolidSurface)
-                list.Add(CreateParam_SynchronousAltitude(app));
+            if (app.currentBody.hasSolidSurface)
+            {
+                if (PhysicalSettings.Instance.showMaxElevation) list.Add(CreateParam_MaxElevation(app));
+                if (PhysicalSettings.Instance.showSynchronousAltitude) list.Add(CreateParam_SynchronousAltitude(app));
+            }
             if (PhysicalSettings.Instance.showOrbitalPeriod && app.currentBody.HasOrbit())
                 list.Add(CreateParam_OrbitalPeriod(app));
 
@@ -187,6 +189,20 @@ namespace PlanetInfoPlus
                 Strings.ROTATION_PERIOD,
                 Strings.LOCKED);
 
+            if (ConfigSettings.IncludeApproximateLockedRotation)
+            {
+                double ratio = app.currentBody.rotationPeriod / app.currentBody.orbit.period;
+                if (app.currentBody.orbit.inclination > 90) ratio = -ratio;
+                if ((ratio > ConfigSettings.LockedRotationMinimum) && (ratio < ConfigSettings.LockedRotationMaximum))
+                {
+                    // treat it as locked, even though it's not
+                    return CreateBody(
+                        app.cascadingList,
+                        Strings.LOCKED_ROTATION,
+                        NumericFormats.RotationPeriod.Localize(Math.Abs(app.currentBody.rotationPeriod)));
+                }
+            }
+
             // Special handling for bodies with retrograde rotation.
             if (app.currentBody.rotationPeriod < 0)
             {
@@ -194,7 +210,7 @@ namespace PlanetInfoPlus
                     app.cascadingList,
                     InfoColors.Attention,
                     Strings.RETROGRADE_ROTATION,
-                    KSPUtil.PrintTime(-app.currentBody.rotationPeriod, 3, false));
+                    NumericFormats.RotationPeriod.Localize(-app.currentBody.rotationPeriod));
             }
 
             // Either it's not tidally locked, or we're not showing the orbital period.
@@ -203,7 +219,7 @@ namespace PlanetInfoPlus
             return CreateBody(
                 app.cascadingList,
                 app.currentBody.tidallyLocked ? Strings.LOCKED_ROTATION : Strings.ROTATION_PERIOD,
-                KSPUtil.PrintTime(app.currentBody.rotationPeriod, 3, false));
+                NumericFormats.RotationPeriod.Localize(app.currentBody.rotationPeriod));
         }
 
         private static UIListItem CreateParam_SOI(KbApp_PlanetParameters app)
@@ -241,7 +257,7 @@ namespace PlanetInfoPlus
             return CreateBody(
                 app.cascadingList,
                 Strings.ORBITAL_PERIOD,
-                KSPUtil.PrintTime(app.currentBody.orbit.period, 3, false));
+                NumericFormats.OrbitPeriod.Localize(app.currentBody.orbit.period));
         }
 
 

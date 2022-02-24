@@ -7,7 +7,7 @@ namespace PlanetInfoPlus
     /// Stores persisted data in the .sfs file. This is where we remember information
     /// to be persisted across play sessions.
     /// </summary>
-    [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.TRACKSTATION, GameScenes.FLIGHT)]
+    [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.TRACKSTATION, GameScenes.FLIGHT, GameScenes.SPACECENTER)]
     class PlanetInfoScenario : ScenarioModule
     {
         private const string TIMESTAMP = "PlanetInfoPlusTimestamp";

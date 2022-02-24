@@ -54,6 +54,11 @@
             }
         }
 
+        public static string Colorize(string text, string color)
+        {
+            return (string.IsNullOrEmpty(color)) ? text : ("<color=" + color + ">" + text + "</color>");
+        }
+
         public class Colorizer
         {
 
@@ -67,7 +72,7 @@
 
             public string Colorize(string text)
             {
-                return (string.IsNullOrEmpty(color)) ? text : ("<color=" + color + ">" + text + "</color>");
+                return InfoColors.Colorize(text, color);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PlanetInfoPlus
 {
@@ -43,6 +44,46 @@ namespace PlanetInfoPlus
         public static double MaxElevation(this CelestialBody body)
         {
             return CelestialBodyElevationScanner.GetMaxElevation(body);
+        }
+
+        public static double SMA(this CelestialBody body)
+        {
+            return (body.orbit == null) ? 0.0 : body.orbit.semiMajorAxis;
+        }
+
+        /// <summary>
+        /// Returns true if this body has the same parent as the homeworld.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static bool IsHomeworldSibling(this CelestialBody body)
+        {
+            if (body.isHomeWorld) return false;
+            if (body.flightGlobalsIndex == body.referenceBody.flightGlobalsIndex) return false; // it's the sun
+
+            return body.referenceBody.flightGlobalsIndex == FlightGlobals.GetHomeBodyIndex();
+        }
+
+        /// <summary>
+        /// Returns the orbital hierarchy level, e.g. 0 for the sun,
+        /// 1 for planets, 2 for their moons, etc.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static int HierarchyLevel(this CelestialBody body)
+        {
+            int level = 0;
+            while (body.flightGlobalsIndex != body.referenceBody.flightGlobalsIndex)
+            {
+                level++;
+                if (level > 100)
+                {
+                    Logging.Error("ERROR! Hierarchy overflow for " + body.GetDisplayName() + ", parent " + body.referenceBody.GetDisplayName());
+                    break;
+                }
+                body = body.referenceBody;
+            }
+            return level;
         }
     }
 }

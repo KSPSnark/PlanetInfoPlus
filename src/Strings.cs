@@ -19,7 +19,7 @@ namespace PlanetInfoPlus
         public static readonly string SOI = Localizer.Format(Tags.SOI);
 
         // Parameter names (atmospheric)
-        public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = Localizer.Format(Tags.ATMOSPHERE_CHARACTERISTICS_HEADER);
+        public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = InfoColors.Colorize(Localizer.Format(Tags.ATMOSPHERE_CHARACTERISTICS_HEADER), "#27e174");
         public static readonly string ATMOSPHERE_PRESENT = Localizer.Format(Tags.ATMOSPHERE_PRESENT);
         public static readonly string ATMOSPHERE_HEIGHT = Localizer.Format(Tags.ATMOSPHERE_HEIGHT);
         public static readonly string ATMOSPHERE_PRESSURE = Localizer.Format(Tags.ATMOSPHERE_PRESSURE);
@@ -67,7 +67,13 @@ namespace PlanetInfoPlus
             public const string SOI = "#autoLOC_462438";
 
             // Parameter names (atmospheric
-            public const string ATMOSPHERE_CHARACTERISTICS_HEADER = "#autoLOC_462406";
+            public static readonly string ATMOSPHERE_CHARACTERISTICS_HEADER = "#autoLOC_8003223"; // need to colorize this though
+            // A note about ATMOSPHERE_CHARACTERISTICS_HEADER, above. The actual tag that
+            // stock KSP uses for this is #autoLOC_462406, which in English is rendered
+            // as "Atmospheric Characteristics:".  However, that's long enough that it word-wraps
+            // in the header in the window, which wastes vertical real estate. Therefore, I've
+            // swapped it for this value, which is rendered as "Atmosphere:" and fits better.
+            // If I ever figure out how to widen the app window a bit, I may switch it back again.
             public const string ATMOSPHERE_PRESENT = "#autoLOC_462448";
             public const string ATMOSPHERE_HEIGHT = "#autoLOC_462453";
             public const string ATMOSPHERE_PRESSURE = "#autoLOC_462456";

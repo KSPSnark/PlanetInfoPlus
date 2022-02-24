@@ -54,8 +54,7 @@ namespace PlanetInfoPlus
         private static double ScanForMaxElevation(CelestialBody body)
         {
             // Keep track of how long we spend on this.  It's expensive.
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
+            Stopwatch timer = Stopwatch.StartNew();
 
             // Do a uniform scan of the entire surface of the planet, collecting elevation
             // points in a grid.
@@ -149,6 +148,132 @@ namespace PlanetInfoPlus
             public static SurfacePoint At(CelestialBody body, double latitude, double longitude)
             {
                 return new SurfacePoint(latitude, longitude, body.TerrainAltitude(latitude, longitude, true));
+            }
+        }
+
+        /// <summary>
+        /// Spend up to the specified number of milliseconds pre-calculating the highest point
+        /// on as many planets as possible, in priority order (starting with the homeworld).
+        /// </summary>
+        /// <param name="durationMillis"></param>
+        public static void Precalculate(double durationMillis)
+        {
+            // Get all the bodies in the solar system, and sort them in priority order.
+            List<CelestialBody> allBodies = new List<CelestialBody>(FlightGlobals.Bodies.Where(b => b.hasSolidSurface));
+            allBodies.Sort(PlanetComparer.Instance);
+            Logging.Log("Pre-calculating maximum elevations for up to " + durationMillis + " ms (" + allBodies.Count + " total bodies)");
+
+            // Start pre-calculating.  We just call GetMaxElevation on every single one,
+            // starting with the beginning.  Any that have previously been calculated
+            // (either on a prior pre-calculation run, or during gameplay) will simply
+            // immediately return the previously calculated value, so this way we know
+            // we're spending the full time allotted in calculating bodies that weren't
+            // previously done.
+            Stopwatch timer = Stopwatch.StartNew();
+            int done = 0;
+            for (int i = 0; i < allBodies.Count; i++)
+            {
+                GetMaxElevation(allBodies[i]);
+                done++;
+                if (timer.ElapsedMilliseconds > durationMillis) break;
+            }
+            int percentDone = (int)(100.0 * (double)done / (double)allBodies.Count);
+            Logging.Log("Elapsed time " + timer.ElapsedMilliseconds + ", " + percentDone + "% of bodies have been calculated.");
+        }
+
+        //========================== PLANET SORTING ====================================
+        // The various functions below determine in what order we precalculate expensive-to-compute
+        // data for the planets in the system. The rationale is that we want to pick the "user is
+        // most likely to look at this" bodies first.  So we start with the homeworld, then
+        // any moons it has, etc.
+
+        /// <summary>
+        /// Prioritize homeworld over others.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int HomeworldComparison(CelestialBody b1, CelestialBody b2) => b2.isHomeWorld.CompareTo(b1.isHomeWorld);
+
+        /// <summary>
+        /// Prioritize homeworld moons over others.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int HomeworldMoonComparison(CelestialBody b1, CelestialBody b2) => HomeworldComparison(b1.referenceBody, b2.referenceBody);
+
+        /// <summary>
+        /// Prioritize homeworld siblings (planets orbiting the same primary as the homeworld) over others.
+        /// Only really matters for modded solar systems, where the homeworld might be a moon of some planet.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int SiblingComparison(CelestialBody b1, CelestialBody b2) => b2.IsHomeworldSibling().CompareTo(b1.IsHomeworldSibling());
+
+        /// <summary>
+        /// Prioritize planets over moons.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int HierarchyComparison(CelestialBody b1, CelestialBody b2) => b1.HierarchyLevel().CompareTo(b2.HierarchyLevel());
+
+        /// <summary>
+        /// Prioritize moons of inner planets over moons of outer ones
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int MoonParentComparison(CelestialBody b1, CelestialBody b2) => SmaComparison(b1.referenceBody, b2.referenceBody);
+
+        /// <summary>
+        /// Prioritize smaller orbits over bigger.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int SmaComparison(CelestialBody b1, CelestialBody b2) => b1.SMA().CompareTo(b2.SMA());
+
+        /// <summary>
+        /// Alphabetical by name.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int NameComparison(CelestialBody b1, CelestialBody b2) => b1.name.CompareTo(b2.name);
+
+
+        /// <summary>
+        /// Used for sorting planets into priority order for pre-caching calculations.
+        /// </summary>
+        private class PlanetComparer : IComparer<CelestialBody>
+        {
+            public delegate int Comparison(CelestialBody body1, CelestialBody body2);
+
+            public static PlanetComparer Instance = new PlanetComparer();
+
+            // Comparisons to use for prioritizing bodies to pre-cache, in descending
+            // order of importance.
+            private static readonly Comparison[] comparisons = {
+                HomeworldComparison,
+                HomeworldMoonComparison,
+                SiblingComparison,
+                HierarchyComparison,
+                MoonParentComparison,
+                SmaComparison,
+                NameComparison
+            };
+
+            public int Compare(CelestialBody body1, CelestialBody body2)
+            {
+                for (int i = 0; i < comparisons.Length; i++)
+                {
+                    int comparison = comparisons[i].Invoke(body1, body2);
+                    if (comparison != 0) return comparison;
+                }
+                return 0;
             }
         }
     }

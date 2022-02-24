@@ -19,6 +19,9 @@
         public static readonly NumberLocalizer AtmospherePressure  = new NumberLocalizer("AtmospherePressure");
         public static readonly NumberLocalizer Temperature         = new NumberLocalizer("Temperature");
 
+        public static readonly TimeLocalizer OrbitPeriod    = new TimeLocalizer("OrbitPeriodPrecision");
+        public static readonly TimeLocalizer RotationPeriod = new TimeLocalizer("RotationPeriodPrecision");
+
 
         private static readonly NumberLocalizer[] localizers =
         {
@@ -32,6 +35,12 @@
             AtmosphereHeight,
             AtmospherePressure,
             Temperature,
+        };
+
+        private static readonly TimeLocalizer[] timeLocalizers =
+        {
+            OrbitPeriod,
+            RotationPeriod
         };
 
         /// <summary>
@@ -52,6 +61,19 @@
                         localizers[j].format = entry.value;
                         Logging.Log("Numeric format " + entry.name + " = " + entry.value);
                         continue;
+                    }
+                }
+                if (!found)
+                {
+                    for (int j = 0; j < timeLocalizers.Length; j++)
+                    {
+                        if (entry.name == timeLocalizers[j].configName)
+                        {
+                            found = true;
+                            timeLocalizers[j].precision = int.Parse(entry.value);
+                            Logging.Log("Time formatter " + entry.name + " = " + entry.value);
+                            continue;
+                        }
                     }
                 }
                 if (!found)
@@ -83,6 +105,22 @@
             public string Localize(double value)
             {
                 return (string.IsNullOrEmpty(format)) ? value.ToString() : KSPUtil.LocalizeNumber(value, format);
+            }
+        }
+
+        public class TimeLocalizer
+        {
+            public readonly string configName;
+            public int precision = 3;
+
+            internal TimeLocalizer(string configName)
+            {
+                this.configName = configName;
+            }
+
+            public string Localize(double durationSeconds)
+            {
+                return KSPUtil.PrintTime(durationSeconds, precision, false);
             }
         }
     }

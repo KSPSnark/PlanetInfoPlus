@@ -51,7 +51,9 @@
     <Compile Include="AtmosphericSettings.cs" />
     <Compile Include="CelestialBodyElevationScanner.cs" />
     <Compile Include="CelestialBodyExtensions.cs" />
+    <Compile Include="ConfigSettings.cs" />
     <Compile Include="InfoColors.cs" />
+    <Compile Include="KSCBehavior.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="NumericFormats.cs" />
     <Compile Include="PhysicalSettings.cs" />

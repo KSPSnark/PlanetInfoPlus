@@ -1,3 +1,12 @@
+Version 1.2
+* Add some clever pre-calculation routines to substantially reduce momentary freezes in the planetarium view.
+* Add Kopernicus compatibility patch to handle certain edge cases. Thanks to R-T-B for tracking this down.
+* Add config options for "approximately tidally locked" for Principia compatibility. Thanks to R-T-B for the suggestion.
+* Shorter "Atmospheric Characteristics:" label to fit on one line.  Thanks to flart for the suggestion.
+* Add config options for time precision for rotation & orbit periods. Thanks to flart for the suggestion.
+* Fixed a bug where bodies with no surface would show "NaN" for max elevation. Thanks to flart for catching.
+
+
 Version 1.1
 * Add "max elevation" field for planets. Thanks to Poodmund for pointing me at a helpful algorithm from SigmaCartographer!
 * Add special handling for retrograde rotation (it's displayed in an attention-catching way).
