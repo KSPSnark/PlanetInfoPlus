@@ -27,6 +27,17 @@
 
 
         // Settings
+        public bool IsAnyActive => showEquatorialRadius
+            || showArea
+            || showMass
+            || showGravParameter
+            || showGravityASL
+            || showEscapeVelocity
+            || showRotationPeriod
+            || showSOI
+            || showMaxElevation
+            || showSynchronousAltitude
+            || showOrbitalPeriod;
 
         [GameParameters.CustomStringParameterUI(Strings.Tags.PHYSICAL_SETTINGS_LABEL, lines = 3)]
         public string dummy = "";

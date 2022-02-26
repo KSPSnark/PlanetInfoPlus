@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace PlanetInfoPlus
@@ -18,29 +19,6 @@ namespace PlanetInfoPlus
         // to ignore old/obsolete cached data (which might be wrong) when the mod is updated.
         private static readonly long timestamp = File.GetLastWriteTimeUtc(typeof(PlanetInfoScenario).Assembly.Location).Ticks;
 
-        private static readonly Dictionary<string, double> maxPlanetElevations = new Dictionary<string, double>();
-
-        /// <summary>
-        /// Try to get the max elevation of the specified planet. Returns true if found, false if not.
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="maxElevation"></param>
-        /// <returns></returns>
-        public static bool TryGetMaxElevation(CelestialBody body, out double maxElevation)
-        {
-            return maxPlanetElevations.TryGetValue(body.name, out maxElevation);
-        }
-
-        /// <summary>
-        /// Set the max elevation of the specified planet.
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="maxElevation"></param>
-        public static void SetMaxElevation(CelestialBody body, double maxElevation)
-        {
-            maxPlanetElevations[body.name] = maxElevation;
-        }
-
         /// <summary>
         /// Here when the scenario is loading. It's called after the other stock
         /// info is loaded.
@@ -49,7 +27,7 @@ namespace PlanetInfoPlus
         public override void OnLoad(ConfigNode node)
         {
             base.OnLoad(node);
-            maxPlanetElevations.Clear();
+            SurfacePoint.maxPlanetElevations.Clear();
 
             // Check timestamp. If our previous cached information has the wrong timestamp
             // on it, then clear the cache.
@@ -75,9 +53,18 @@ namespace PlanetInfoPlus
                 ConfigNode.Value value = node.values[i];
                 if (!value.name.StartsWith(ELEVATION_PREFIX)) continue;
                 string planetName = value.name.Substring(ELEVATION_PREFIX.Length);
-                double elevation = double.Parse(value.value);
-                Logging.Log("Read max elevation of " + planetName + ": " + elevation);
-                maxPlanetElevations.Add(planetName, elevation);
+                SurfacePoint point;
+                try
+                {
+                    point = SurfacePoint.Parse(value.value);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Warn("Invalid surface point format found for " + planetName + ", ignoring: " + ex.Message);
+                    continue;
+                }
+                Logging.Log("Read max elevation of " + planetName + ": " + point.altitude + " m at lat=" + point.latitude + ", lon=" + point.longitude);
+                SurfacePoint.maxPlanetElevations.Add(planetName, point);
             }
         }
 
@@ -88,15 +75,19 @@ namespace PlanetInfoPlus
         public override void OnSave(ConfigNode node)
         {
             base.OnSave(node);
-            if (maxPlanetElevations.Count == 0) return;
+            if (SurfacePoint.maxPlanetElevations.Count == 0) return;
 
             Logging.Log("Writing cache timestamp: " + timestamp);
             node.AddValue(TIMESTAMP, timestamp);
 
-            foreach (KeyValuePair<string, double> maxElevation in maxPlanetElevations)
+            List<string> planets = new List<string>(SurfacePoint.maxPlanetElevations.Keys);
+            planets.Sort();
+            foreach (string planet in planets)
             {
-                Logging.Log("Write max elevation of " + maxElevation.Key + ": " + maxElevation.Value);
-                node.AddValue(ELEVATION_PREFIX + maxElevation.Key, maxElevation.Value);
+                SurfacePoint maxElevation = SurfacePoint.maxPlanetElevations[planet];
+                Logging.Log("Write max elevation of " + planet + ": " + maxElevation.altitude
+                    + " m at lat=" + maxElevation.latitude + ", lon=" + maxElevation.longitude);
+                node.AddValue(ELEVATION_PREFIX + planet, maxElevation.ToString());
             }
         }
 

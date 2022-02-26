@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KSPAchievements;
+using System;
 
 namespace PlanetInfoPlus
 {
@@ -42,7 +43,7 @@ namespace PlanetInfoPlus
         /// <returns></returns>
         public static double MaxElevation(this CelestialBody body)
         {
-            return CelestialBodyElevationScanner.GetMaxElevation(body);
+            return CelestialBodyElevationScanner.GetMaxElevation(body).altitude;
         }
 
         public static double SMA(this CelestialBody body)
@@ -117,6 +118,21 @@ namespace PlanetInfoPlus
         {
             ExplorationProgress progress = ExplorationProgress.For(body);
             return (progress == null) ? Strings.NONE : progress.Description;
+        }
+
+        /// <summary>
+        /// Returns whether the player has visited this body or not.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static bool IsExplored(this CelestialBody body)
+        {
+            CelestialBodySubtree progress = body.progressTree;
+            return progress.flyBy.IsComplete
+                || progress.orbit.IsComplete
+                || progress.suborbit.IsComplete
+                || progress.flight.IsComplete
+                || progress.escape.IsComplete;
         }
     }
 }

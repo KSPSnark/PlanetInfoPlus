@@ -29,18 +29,18 @@ namespace PlanetInfoPlus
         /// </summary>
         /// <param name="body"></param>
         /// <returns></returns>
-        public static double GetMaxElevation(CelestialBody body)
+        public static SurfacePoint GetMaxElevation(CelestialBody body)
         {
-            // Skip the whole shebang and just return NaN unless the body actually *has* a surface.
-            if (!body.hasSolidSurface) return double.NaN;
+            // Skip the whole shebang and just return null unless the body actually *has* a surface.
+            if (!body.hasSolidSurface) return null;
             PQS pqs = body.pqsController;
-            if (pqs == null) return double.NaN;
+            if (pqs == null) return null;
 
-            double maxElevation;
-            if (!PlanetInfoScenario.TryGetMaxElevation(body, out maxElevation))
+            SurfacePoint maxElevation;
+            if (!SurfacePoint.maxPlanetElevations.TryGetValue(body.name, out maxElevation))
             {
                 maxElevation = ScanForMaxElevation(body);
-                PlanetInfoScenario.SetMaxElevation(body, maxElevation);
+                SurfacePoint.maxPlanetElevations.Add(body.name, maxElevation);
             }
             return maxElevation;
         }
@@ -51,7 +51,7 @@ namespace PlanetInfoPlus
         /// </summary>
         /// <param name="body"></param>
         /// <returns></returns>
-        private static double ScanForMaxElevation(CelestialBody body)
+        private static SurfacePoint ScanForMaxElevation(CelestialBody body)
         {
             // Keep track of how long we spend on this.  It's expensive.
             Stopwatch timer = Stopwatch.StartNew();
@@ -83,11 +83,11 @@ namespace PlanetInfoPlus
             timer.Stop();
 
             Logging.Log(
-                "Scanned highest elevation on " + body.GetDisplayName()
+                "Scanned highest elevation on " + body.name
                 + " in " + timer.ElapsedMilliseconds + " ms (" + sampleCount + " samples):  "
                 + (int)highest.altitude + " m at latitude=" + highest.latitude + ", longitude=" + highest.longitude);
 
-            return highest.altitude;
+            return highest;
         }
 
         /// <summary>
@@ -129,39 +129,25 @@ namespace PlanetInfoPlus
             return FindHighest(body, smallIncrementLatitude, highest.OrderByDescending(p => p.altitude).Take(FILTER_SIZE/2), ref sampleCount);
         }
 
-        /// <summary>
-        /// Represents a coordinate on the surface of the planet.
-        /// </summary>
-        private class SurfacePoint
-        {
-            public readonly double latitude;
-            public readonly double longitude;
-            public readonly double altitude;
-
-            private SurfacePoint(double latitude, double longitude, double altitude)
-            {
-                this.latitude = latitude;
-                this.longitude = longitude;
-                this.altitude = altitude;
-            }
-
-            public static SurfacePoint At(CelestialBody body, double latitude, double longitude)
-            {
-                return new SurfacePoint(latitude, longitude, body.TerrainAltitude(latitude, longitude, true));
-            }
-        }
 
         /// <summary>
         /// Spend up to the specified number of milliseconds pre-calculating the highest point
         /// on as many planets as possible, in priority order (starting with the homeworld).
         /// </summary>
-        /// <param name="durationMillis"></param>
+        /// <param name="durationMillis">Maximum duration to spend calculating. (If < 0, all bodies will be calculated and no limit applied.)</param>
         public static void Precalculate(double durationMillis)
         {
             // Get all the bodies in the solar system, and sort them in priority order.
             List<CelestialBody> allBodies = new List<CelestialBody>(FlightGlobals.Bodies.Where(b => b.hasSolidSurface));
             allBodies.Sort(PlanetComparer.Instance);
-            Logging.Log("Pre-calculating maximum elevations for up to " + durationMillis + " ms (" + allBodies.Count + " total bodies)");
+            if (durationMillis < 0)
+            {
+                Logging.Log("Pre-calculating maximum elevations for all " + allBodies.Count + " bodies");
+            }
+            else
+            {
+                Logging.Log("Pre-calculating maximum elevations for up to " + durationMillis + " ms (" + allBodies.Count + " total bodies)");
+            }
 
             // Start pre-calculating.  We just call GetMaxElevation on every single one,
             // starting with the beginning.  Any that have previously been calculated
@@ -175,7 +161,7 @@ namespace PlanetInfoPlus
             {
                 GetMaxElevation(allBodies[i]);
                 done++;
-                if (timer.ElapsedMilliseconds > durationMillis) break;
+                if ((durationMillis >= 0) && (timer.ElapsedMilliseconds > durationMillis)) break;
             }
             int percentDone = (int)(100.0 * (double)done / (double)allBodies.Count);
             Logging.Log("Elapsed time " + timer.ElapsedMilliseconds + ", " + percentDone + "% of bodies have been calculated.");
@@ -194,6 +180,14 @@ namespace PlanetInfoPlus
         /// <param name="b2"></param>
         /// <returns></returns>
         private static int HomeworldComparison(CelestialBody b1, CelestialBody b2) => b2.isHomeWorld.CompareTo(b1.isHomeWorld);
+
+        /// <summary>
+        /// Prioritize explored worlds over unexplored.
+        /// </summary>
+        /// <param name="b1"></param>
+        /// <param name="b2"></param>
+        /// <returns></returns>
+        private static int ExploredComparison(CelestialBody b1, CelestialBody b2) => b2.IsExplored().CompareTo(b1.IsExplored());
 
         /// <summary>
         /// Prioritize homeworld moons over others.
@@ -266,6 +260,7 @@ namespace PlanetInfoPlus
             // order of importance.
             private static readonly Comparison[] comparisons = {
                 HomeworldComparison,
+                ExploredComparison,
                 HomeworldMoonComparison,
                 HomeworldParentComparison,
                 HomeworldSiblingComparison,

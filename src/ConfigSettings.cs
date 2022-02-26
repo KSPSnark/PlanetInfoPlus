@@ -63,7 +63,7 @@ namespace PlanetInfoPlus
                     }
                     if (isValid) Logging.Log(value.name + " = " + value.value);
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     Logging.Error("Invalid value " + value.value + " found for " + value.name);
                 }

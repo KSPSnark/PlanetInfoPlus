@@ -41,12 +41,18 @@ namespace PlanetInfoPlus
 
             // Add the physical characteristics section.
             UnityEngine.UI.Button button;
-            UIListItem physicalHeader = app.cascadingList.CreateHeader(Localizer.Format(Strings.PHYSICAL_CHARACTERISTICS_HEADER), out button, true);
-            app.cascadingList.ruiList.AddCascadingItem(physicalHeader, app.cascadingList.CreateFooter(), CreatePhysicalCharacteristics(app), button);
+            if (PhysicalSettings.Instance.IsAnyActive)
+            {
+                UIListItem physicalHeader = app.cascadingList.CreateHeader(Localizer.Format(Strings.PHYSICAL_CHARACTERISTICS_HEADER), out button, true);
+                app.cascadingList.ruiList.AddCascadingItem(physicalHeader, app.cascadingList.CreateFooter(), CreatePhysicalCharacteristics(app), button);
+            }
 
             // Add the atmospheric characteristics section.
-            UIListItem atmosphericHeader = app.cascadingList.CreateHeader(Localizer.Format(Strings.ATMOSPHERE_CHARACTERISTICS_HEADER), out button, true);
-            app.cascadingList.ruiList.AddCascadingItem(atmosphericHeader, app.cascadingList.CreateFooter(), CreateAtmosphericCharacteristics(app), button);
+            if (AtmosphericSettings.Instance.IsAnyActive)
+            {
+                UIListItem atmosphericHeader = app.cascadingList.CreateHeader(Localizer.Format(Strings.ATMOSPHERE_CHARACTERISTICS_HEADER), out button, true);
+                app.cascadingList.ruiList.AddCascadingItem(atmosphericHeader, app.cascadingList.CreateFooter(), CreateAtmosphericCharacteristics(app), button);
+            }
 
             // Add the gameplay characteristics section.
             if (GameplaySettings.Instance.IsAnyActive)

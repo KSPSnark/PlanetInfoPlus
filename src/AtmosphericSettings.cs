@@ -27,6 +27,10 @@
 
 
         // Settings
+        public bool IsAnyActive => showPresent
+            || showHeight
+            || showPressure
+            || showTemperature;
 
         [GameParameters.CustomStringParameterUI(Strings.Tags.ATMOSPHERIC_SETTINGS_LABEL, lines = 3)]
         public string dummy = "";
