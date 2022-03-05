@@ -31,7 +31,7 @@ namespace PlanetInfoPlus
         /// <exception cref="NotImplementedException"></exception>
         private bool OnAppActivated(KbApp_PlanetParameters app, MapObject target)
         {
-            Logging.Log("App activated for " + app.currentBody.GetDisplayName());
+            Logging.Log("App activated for " + app.currentBody.name);
 
             // We'll clear out the list and rebuild it from scratch.
             app.appFrame.scrollList.Clear(true);
@@ -144,6 +144,14 @@ namespace PlanetInfoPlus
                 list.Add(CreateParam_UpperAtmosphereHeight(app));
             if (GameplaySettings.Instance.showNearSpaceHight) list.Add(CreateParam_NearSpaceHeight(app));
             if (GameplaySettings.Instance.showBiomeCount)     list.Add(CreateParam_BiomeCount(app));
+            if (GameplaySettings.Instance.showExploredBiomeCount
+                && (ResearchAndDevelopment.Instance != null) // only show in a game that has science
+                && (app.currentBody.BiomeCount() > 0) // only show for bodies with biomes
+                && (app.currentBody.IsExplored() || !GameplaySettings.Instance.showExploration))
+                // ^ don't bother showing "explored biomes: none" if it also says "exploration: none"
+            {
+                list.Add(CreateParam_ExploredBiomeCount(app));
+            }
             if (GameplaySettings.Instance.showExploration)    list.Add(CreateParam_Exploration(app));
 
             return list;
@@ -360,6 +368,28 @@ namespace PlanetInfoPlus
                 app.cascadingList,
                 Strings.BIOME_COUNT,
                 (numBiomes > 0) ? numBiomes.ToString() : Strings.NONE);
+        }
+
+        private static UIListItem CreateParam_ExploredBiomeCount(KbApp_PlanetParameters app)
+        {
+            int numExploredBiomes = app.currentBody.ExploredBiomeCount();
+            string text;
+            if (numExploredBiomes == 0)
+            {
+                text = Strings.NONE;
+            }
+            else if (numExploredBiomes == app.currentBody.BiomeCount())
+            {
+                text = Strings.ALL;
+            }
+            else
+            {
+                text = numExploredBiomes.ToString();
+            }
+            return CreateBody(
+                app.cascadingList,
+                Strings.EXPLORED_BIOME_COUNT,
+                text);
         }
 
         private static UIListItem CreateParam_Exploration(KbApp_PlanetParameters app)

@@ -42,6 +42,7 @@ namespace PlanetInfoPlus
         // Misc
         public static readonly string YES = Localizer.Format("#autoLOC_439855");
         public static readonly string NO = Localizer.Format("#autoLOC_439856");
+        public static readonly string ALL = Localizer.Format("#autoLOC_900712");
         public static readonly string NONE = Localizer.Format("#autoLOC_6003000");
         public static readonly string NOT_APPLICABLE = Localizer.Format("#autoLOC_258912");
 
@@ -57,6 +58,7 @@ namespace PlanetInfoPlus
         public static readonly string UPPER_ATMOSPHERE_HEIGHT = Localizer.Format(Tags.UPPER_ATMOSPHERE_HEIGHT);
         public static readonly string NEAR_SPACE_HEIGHT = Localizer.Format(Tags.NEAR_SPACE_HEIGHT);
         public static readonly string BIOME_COUNT = Localizer.Format(Tags.BIOME_COUNT);
+        public static readonly string EXPLORED_BIOME_COUNT = Localizer.Format(Tags.EXPLORED_BIOME_COUNT);
         public static readonly string EXPLORATION = Localizer.Format(Tags.EXPLORATION);
         public static readonly string PROGRESS_PLANTED_FLAG = Localizer.Format("#PlanetInfoPlus_plantedFlag");
         public static readonly string PROGRESS_LANDING_CREWED = Localizer.Format("#PlanetInfoPlus_landingCrewed");
@@ -112,6 +114,7 @@ namespace PlanetInfoPlus
             public const string UPPER_ATMOSPHERE_HEIGHT = "#PlanetInfoPlus_upperAtmosphereHeight";
             public const string NEAR_SPACE_HEIGHT = "#PlanetInfoPlus_nearSpaceHeight";
             public const string BIOME_COUNT = "#PlanetInfoPlus_biomeCount";
+            public const string EXPLORED_BIOME_COUNT = "#PlanetInfoPlus_exploredBiomeCount";
             public const string EXPLORATION = "#PlanetInfoPlus_exploration";
         }
     }

@@ -10,6 +10,7 @@ namespace PlanetInfoPlus
         // Name of the relevant config section for this class.
         public const string CONFIG_NODE_NAME = "Settings";
 
+        private const string EXPLORED_BIOME_SITUATIONS = "exploredBiomeSituations";
         private const string INCLUDE_APPROXIMATE_LOCKED_ROTATION = "includeApproximateLockedRotation";
         private const string LOCKED_ROTATION_MINIMUM = "lockedRotationMinimum";
         private const string LOCKED_ROTATION_MAXIMUM = "lockedRotationMaximum";
@@ -47,6 +48,9 @@ namespace PlanetInfoPlus
                     bool isValid = true;
                     switch (value.name)
                     {
+                        case EXPLORED_BIOME_SITUATIONS:
+                            ParseExploredBiomeSituations(value.value);
+                            break;
                         case INCLUDE_APPROXIMATE_LOCKED_ROTATION:
                             includeApproximateLockedRotation = bool.Parse(value.value);
                             break;
@@ -66,6 +70,28 @@ namespace PlanetInfoPlus
                 catch (FormatException)
                 {
                     Logging.Error("Invalid value " + value.value + " found for " + value.name);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses a set of ExperimentSituations values out of a string, delimited by | characters.
+        /// </summary>
+        /// <param name="configValue"></param>
+        private static void ParseExploredBiomeSituations(string configValue)
+        {
+            string[] tokens = configValue.Split('|');
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                string token = tokens[i].Trim();
+                ExperimentSituations situation;
+                if (Enum.TryParse(token, out situation))
+                {
+                    ExploredBiomes.AddSituation(situation);
+                }
+                else
+                {
+                    Logging.Warn("Ignoring unknown ExperimentSituations value '" + token + "'");
                 }
             }
         }

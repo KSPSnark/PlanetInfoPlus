@@ -25,6 +25,8 @@ namespace PlanetInfoPlus
             "caipi",       // reporting JNSQ compatibility bug
             "Arrowmaster", // feature suggestions (upper atmosphere height, high/low space boundary)
             "vinix",       // for kindly providing a French translation
+            "eightiesboi", // useful bug report
+            "goldenpeach", // help with French translation
         };
 
         internal void Awake()

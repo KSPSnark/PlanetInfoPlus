@@ -127,12 +127,28 @@ namespace PlanetInfoPlus
         /// <returns></returns>
         public static bool IsExplored(this CelestialBody body)
         {
+            if (body.isHomeWorld) return true; // by definition ;-)
             CelestialBodySubtree progress = body.progressTree;
-            return progress.flyBy.IsComplete
-                || progress.orbit.IsComplete
-                || progress.suborbit.IsComplete
-                || progress.flight.IsComplete
-                || progress.escape.IsComplete;
+            return IsComplete(progress.flyBy)
+                || IsComplete(progress.orbit)
+                || IsComplete(progress.suborbit)
+                || IsComplete(progress.flight)
+                || IsComplete(progress.escape);
+        }
+
+        private static bool IsComplete(ProgressNode node)
+        {
+            return (node != null) && node.IsComplete;
+        }
+
+        /// <summary>
+        /// Gets how many biomes have been explored (returned science data).
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static int ExploredBiomeCount(this CelestialBody body)
+        {
+            return body.IsExplored() ? ExploredBiomes.GetExploredBiomeCount(body) : 0;
         }
     }
 }

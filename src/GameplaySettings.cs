@@ -28,6 +28,7 @@ namespace PlanetInfoPlus
         public bool IsAnyActive => showUpperAtmosphereHeight
             || showNearSpaceHight
             || showBiomeCount
+            || showExploredBiomeCount
             || showExploration;
 
         [GameParameters.CustomStringParameterUI(Strings.Tags.GAMEPLAY_SETTINGS_LABEL, lines = 3)]
@@ -42,6 +43,12 @@ namespace PlanetInfoPlus
 
         [GameParameters.CustomParameterUI(Strings.Tags.BIOME_COUNT)]
         public bool showBiomeCount = true;
+
+        // This setting won't show in sandbox, since "explored biomes" is only
+        // a thing if science exists in the game
+        [GameParameters.CustomParameterUI(Strings.Tags.EXPLORED_BIOME_COUNT,
+            gameMode = GameParameters.GameMode.CAREER | GameParameters.GameMode.SCIENCE)]
+        public bool showExploredBiomeCount = true;
 
         [GameParameters.CustomParameterUI(Strings.Tags.EXPLORATION)]
         public bool showExploration = true;

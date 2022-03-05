@@ -8,7 +8,7 @@ namespace PlanetInfoPlus
     /// Stores persisted data in the .sfs file. This is where we remember information
     /// to be persisted across play sessions.
     /// </summary>
-    [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.TRACKSTATION, GameScenes.FLIGHT, GameScenes.SPACECENTER)]
+    [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER)]
     class PlanetInfoScenario : ScenarioModule
     {
         private const string TIMESTAMP = "PlanetInfoPlusTimestamp";
@@ -27,7 +27,15 @@ namespace PlanetInfoPlus
         public override void OnLoad(ConfigNode node)
         {
             base.OnLoad(node);
-            SurfacePoint.maxPlanetElevations.Clear();
+
+            // There's only one time that we ever want to *actually* load the max elevation
+            // data out of the scenario from the game's savefile, and that's on first
+            // run when loading up the game. If we have any entries already in memory,
+            // it means some combination of "we already loaded them from the savefile before"
+            // and/or "we've been calculating some additional values ourselves". So, if we
+            // already have anything in RAM, don't read anything from the savefile and just
+            // skip the rest of this processing.
+            if (SurfacePoint.maxPlanetElevations.Count > 0) return;
 
             // Check timestamp. If our previous cached information has the wrong timestamp
             // on it, then clear the cache.
@@ -75,6 +83,7 @@ namespace PlanetInfoPlus
         public override void OnSave(ConfigNode node)
         {
             base.OnSave(node);
+
             if (SurfacePoint.maxPlanetElevations.Count == 0) return;
 
             Logging.Log("Writing cache timestamp: " + timestamp);
