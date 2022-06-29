@@ -358,7 +358,7 @@ namespace PlanetInfoPlus
                 app.cascadingList,
                 Strings.NEAR_SPACE_HEIGHT,
                 NumericFormats.NearSpaceHeight.Localize(app.currentBody.scienceValues.spaceAltitudeThreshold)
-                    + " " + Strings.KM);
+                    + " " + Strings.M);
         }
 
         private static UIListItem CreateParam_BiomeCount(KbApp_PlanetParameters app)

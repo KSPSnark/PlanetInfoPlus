@@ -27,6 +27,7 @@ namespace PlanetInfoPlus
             "vinix",          // for kindly providing a French translation
             "eightiesboi",    // useful bug report
             "goldenpeach",    // help with French translation
+            "alartor",        // useful bug report
             "linuxgurugamer", // useful bug report
         };
 
