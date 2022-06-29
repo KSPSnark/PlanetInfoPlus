@@ -1,3 +1,7 @@
+Version 1.4.1
+* Fixed a bug that caused NullReferenceException in certain circumstances. Thanks to linuxgurugamer for the bug report.
+
+
 Version 1.4
 * Added a field to indicate how many biomes have been explored. Thanks to goldenpeach for French translation support.
 * Performance tweak to reduce stutter when saving planet elevations. Thanks to eightiesboi for the bug report.

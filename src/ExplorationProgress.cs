@@ -13,19 +13,19 @@ namespace PlanetInfoPlus
         private readonly Achieved achieved;
         private readonly string description;
 
-        private static readonly ExplorationProgress plantedFlag      = Of(a => a.flagPlant.IsComplete, Strings.PROGRESS_PLANTED_FLAG);
-        private static readonly ExplorationProgress landingCrewed    = Of(a => a.landing.IsCompleteManned, Strings.PROGRESS_LANDING_CREWED);
-        private static readonly ExplorationProgress splashdownCrewed = Of(a => a.splashdown.IsCompleteManned, Strings.PROGRESS_SPLASHDOWN_CREWED);
-        private static readonly ExplorationProgress landing          = Of(a => a.landing.IsComplete, Strings.PROGRESS_LANDING);
-        private static readonly ExplorationProgress splashdown       = Of(a => a.splashdown.IsComplete, Strings.PROGRESS_SPLASHDOWN);
-        private static readonly ExplorationProgress orbitCrewed      = Of(a => a.orbit.IsCompleteManned, Strings.PROGRESS_ORBIT_CREWED);
-        private static readonly ExplorationProgress orbit            = Of(a => a.orbit.IsComplete, Strings.PROGRESS_ORBIT);
-        private static readonly ExplorationProgress flybyCrewed      = Of(a => a.flyBy.IsCompleteManned, Strings.PROGRESS_FLYBY_CREWED);
-        private static readonly ExplorationProgress flyby            = Of(a => a.flyBy.IsComplete, Strings.PROGRESS_FLYBY);
-        private static readonly ExplorationProgress suborbitCrewed   = Of(a => a.suborbit.IsCompleteManned, Strings.PROGRESS_SUBORBIT_CREWED);
-        private static readonly ExplorationProgress suborbit         = Of(a => a.suborbit.IsComplete, Strings.PROGRESS_SUBORBIT);
-        private static readonly ExplorationProgress flightCrewed     = Of(a => a.flight.IsCompleteManned, Strings.PROGRESS_FLIGHT_CREWED);
-        private static readonly ExplorationProgress flight           = Of(a => a.flight.IsComplete, Strings.PROGRESS_FLIGHT);
+        private static readonly ExplorationProgress plantedFlag      = Of(a => IsComplete(a.flagPlant),        Strings.PROGRESS_PLANTED_FLAG);
+        private static readonly ExplorationProgress landingCrewed    = Of(a => IsCompleteManned(a.landing),    Strings.PROGRESS_LANDING_CREWED);
+        private static readonly ExplorationProgress splashdownCrewed = Of(a => IsCompleteManned(a.splashdown), Strings.PROGRESS_SPLASHDOWN_CREWED);
+        private static readonly ExplorationProgress landing          = Of(a => IsComplete(a.landing),          Strings.PROGRESS_LANDING);
+        private static readonly ExplorationProgress splashdown       = Of(a => IsComplete(a.splashdown),       Strings.PROGRESS_SPLASHDOWN);
+        private static readonly ExplorationProgress orbitCrewed      = Of(a => IsCompleteManned(a.orbit),      Strings.PROGRESS_ORBIT_CREWED);
+        private static readonly ExplorationProgress orbit            = Of(a => IsComplete(a.orbit),            Strings.PROGRESS_ORBIT);
+        private static readonly ExplorationProgress flybyCrewed      = Of(a => IsCompleteManned(a.flyBy),      Strings.PROGRESS_FLYBY_CREWED);
+        private static readonly ExplorationProgress flyby            = Of(a => IsComplete(a.flyBy),            Strings.PROGRESS_FLYBY);
+        private static readonly ExplorationProgress suborbitCrewed   = Of(a => IsCompleteManned(a.suborbit),   Strings.PROGRESS_SUBORBIT_CREWED);
+        private static readonly ExplorationProgress suborbit         = Of(a => IsComplete(a.suborbit),         Strings.PROGRESS_SUBORBIT);
+        private static readonly ExplorationProgress flightCrewed     = Of(a => IsCompleteManned(a.flight),     Strings.PROGRESS_FLIGHT_CREWED);
+        private static readonly ExplorationProgress flight           = Of(a => IsComplete(a.flight),           Strings.PROGRESS_FLIGHT);
 
         /// <summary>
         /// In descending order, the most impressive accomplishments for the homeworld.
@@ -74,7 +74,7 @@ namespace PlanetInfoPlus
         {
             ExplorationProgress[] candidates = body.isHomeWorld ? homeworldProgress : generalProgress;
             CelestialBodySubtree progress = body.progressTree;
-
+            if (progress == null) return null;
             for (int i = 0; i < candidates.Length; i++)
             {
                 if (candidates[i].achieved.Invoke(progress)) return candidates[i]; ;
@@ -91,5 +91,9 @@ namespace PlanetInfoPlus
         }
 
         private static ExplorationProgress Of(Achieved achieved, string description) => new ExplorationProgress(achieved, description);
+
+        private static bool IsComplete(ProgressNode node) => (node != null) && node.IsComplete;
+
+        private static bool IsCompleteManned(ProgressNode node) => (node != null) && node.IsCompleteManned;
     }
 }
