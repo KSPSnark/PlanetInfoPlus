@@ -113,8 +113,11 @@ namespace PlanetInfoPlus
                 if (PhysicalSettings.Instance.showMaxElevation) list.Add(CreateParam_MaxElevation(app));
                 if (PhysicalSettings.Instance.showSynchronousAltitude) list.Add(CreateParam_SynchronousAltitude(app));
             }
-            if (PhysicalSettings.Instance.showOrbitalPeriod && app.currentBody.HasOrbit())
-                list.Add(CreateParam_OrbitalPeriod(app));
+            if (app.currentBody.HasOrbit())
+            {
+                if (PhysicalSettings.Instance.showOrbitalPeriod) list.Add(CreateParam_OrbitalPeriod(app));
+                if (PhysicalSettings.Instance.showSemimajorAxis) list.Add(CreateParam_SemimajorAxis(app));
+            }
 
             return list;
         }
@@ -291,6 +294,38 @@ namespace PlanetInfoPlus
                 app.cascadingList,
                 Strings.ORBITAL_PERIOD,
                 NumericFormats.OrbitPeriod.Localize(app.currentBody.orbit.period));
+        }
+
+        private static string FormatInterplanetaryDistance(double distanceMeters)
+        {
+            if (distanceMeters < 1e4)
+            {
+                return NumericFormats.InterplanetaryDistance.Localize(distanceMeters) + " " + Strings.M;
+            }
+            else if (distanceMeters < 1e7)
+            {
+                return NumericFormats.InterplanetaryDistance.Localize(distanceMeters * 0.001) + " " + Strings.KM;
+            }
+            else if (distanceMeters < 1e9)
+            {
+                return NumericFormats.InterplanetaryDistance.Localize(distanceMeters * 0.000001) + " " + Strings.MM;
+            }
+            else if (distanceMeters < 1e12)
+            {
+                return NumericFormats.InterplanetaryDistance.Localize(distanceMeters * 0.000000001) + " " + Strings.GM;
+            }
+            else
+            {
+                return NumericFormats.InterplanetaryDistance.Localize(distanceMeters * 0.000000000001) + " " + Strings.TM;
+            }
+        }
+
+        private static UIListItem CreateParam_SemimajorAxis(KbApp_PlanetParameters app)
+        {
+            return CreateBody(
+                app.cascadingList,
+                Strings.SEMIMAJOR_AXIS,
+                FormatInterplanetaryDistance(app.currentBody.SMA()));
         }
 
 

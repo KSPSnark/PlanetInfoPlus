@@ -113,20 +113,42 @@ namespace PlanetInfoPlus
             List<SurfacePoint> highest = new List<SurfacePoint>(500 * count);
             foreach (SurfacePoint candidate in candidates) 
             {
-                double incrementLongitude = incrementLatitude / Math.Cos(candidate.latitude * Math.PI / 180.0);
+                double incrementLongitude = isPolar(candidate.latitude) ? 180.0 : (incrementLatitude / Math.Cos(candidate.latitude * Math.PI / 180.0));
                 double smallIncrementLongitude = incrementLongitude * 0.1;
-                for (double latitude = candidate.latitude - 0.5 * incrementLatitude; latitude <= candidate.latitude + 0.5 * incrementLatitude; latitude += smallIncrementLatitude)
+                double minLatitude = Math.Max(-90.0, candidate.latitude - 0.5 * incrementLatitude);
+                double maxLatitude = Math.Min(90.0, candidate.latitude + 0.5 * incrementLatitude);
+                for (double latitude = minLatitude; latitude <= maxLatitude; latitude += smallIncrementLatitude)
                 {
-                    for (double longitude = candidate.longitude - 0.5 * incrementLongitude; longitude <= candidate.longitude + 0.5 * incrementLongitude; longitude += smallIncrementLongitude)
+                    if (isPolar(latitude))
                     {
-                        highest.Add(SurfacePoint.At(body, latitude, longitude));
+                        // we're at the pole, don't try to scan through longitudes
+                        highest.Add(SurfacePoint.At(body, latitude, candidate.longitude));
                         ++sampleCount;
+                    }
+                    else
+                    {
+                        for (double longitude = candidate.longitude - 0.5 * incrementLongitude; longitude <= candidate.longitude + 0.5 * incrementLongitude; longitude += smallIncrementLongitude)
+                        {
+                            SurfacePoint sample = SurfacePoint.At(body, latitude, longitude);
+                            highest.Add(sample);
+                            ++sampleCount;
+                        }
                     }
                 }
             }
 
             // Take the best of those and recurse further.
             return FindHighest(body, smallIncrementLatitude, highest.OrderByDescending(p => p.altitude).Take(FILTER_SIZE/2), ref sampleCount);
+        }
+
+        /// <summary>
+        /// Returns true if the specified latitude is close enough to a pole to cause math problems.
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <returns></returns>
+        private static bool isPolar(double latitude)
+        {
+            return (latitude < (-90.0 + SMALLEST_INCREMENT)) || (latitude > (90.0 - SMALLEST_INCREMENT));
         }
 
 

@@ -29,6 +29,8 @@ namespace PlanetInfoPlus
             "goldenpeach",    // help with French translation
             "alartor",        // useful bug report
             "linuxgurugamer", // useful bug report
+            "panarchist",     // feature suggestion: semimajor axis display
+            "ssd21345"        // useful bug report
         };
 
         internal void Awake()

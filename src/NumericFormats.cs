@@ -18,7 +18,8 @@
         public static readonly NumberLocalizer AtmosphereHeight    = new NumberLocalizer("AtmosphereHeightM");
         public static readonly NumberLocalizer AtmospherePressure  = new NumberLocalizer("AtmospherePressure");
         public static readonly NumberLocalizer Temperature         = new NumberLocalizer("Temperature");
-        public static readonly NumberLocalizer NearSpaceHeight = new NumberLocalizer("NearSpaceHeightKm");
+        public static readonly NumberLocalizer NearSpaceHeight     = new NumberLocalizer("NearSpaceHeightKm");
+        public static readonly NumberLocalizer InterplanetaryDistance = new NumberLocalizer("InterplanetaryDistance");
 
         public static readonly TimeLocalizer OrbitPeriod    = new TimeLocalizer("OrbitPeriodPrecision");
         public static readonly TimeLocalizer RotationPeriod = new TimeLocalizer("RotationPeriodPrecision");
@@ -37,6 +38,7 @@
             AtmospherePressure,
             Temperature,
             NearSpaceHeight,
+            InterplanetaryDistance,
         };
 
         private static readonly TimeLocalizer[] timeLocalizers =

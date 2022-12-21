@@ -1,3 +1,8 @@
+Version 1.4.3
+* Added optional display of semimajor axis. Thanks to panarchist for the suggestion!
+* Fixed a bug in which certain planet packs could cause the mod to blow up when calculating max height. Thanks to ssd21345 for the bug report.
+
+
 Version 1.4.2
 * Fixed a bug in which the "near space" height is displayed with wrong units. Thanks to alartor for the bug report.
 

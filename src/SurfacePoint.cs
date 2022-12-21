@@ -22,11 +22,25 @@ namespace PlanetInfoPlus
             this.altitude = altitude;
         }
 
+        /// <summary>
+        /// Gets the surface point at the specified coordinates.
+        /// </summary>
+        /// <param name="body"></param>
+        /// <param name="latitude">Latitude, in degrees</param>
+        /// <param name="longitude">Longitude, in degrees</param>
+        /// <returns></returns>
         public static SurfacePoint At(CelestialBody body, double latitude, double longitude)
         {
             return new SurfacePoint(latitude, longitude, body.TerrainAltitude(latitude, longitude, true));
         }
 
+        /// <summary>
+        /// Parses a SurfacePoint from a string representation thereof, in the format which
+        /// ToString() produces.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static SurfacePoint Parse(string text)
         {
             string[] parts = text.Split(',');
@@ -40,6 +54,10 @@ namespace PlanetInfoPlus
             return new SurfacePoint(latitude, longitude, altitude);
         }
 
+        /// <summary>
+        /// String representation of a SurfacePoint. Used for persisting to save files.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return altitude.ToString() + ", " + latitude.ToString() + ", " + longitude.ToString();

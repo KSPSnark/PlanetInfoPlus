@@ -74,5 +74,8 @@
 
         [GameParameters.CustomParameterUI(Strings.Tags.ORBITAL_PERIOD)]
         public bool showOrbitalPeriod = true;
+
+        [GameParameters.CustomParameterUI(Strings.Tags.SEMIMAJOR_AXIS)]
+        public bool showSemimajorAxis = false;
     }
 }

@@ -31,6 +31,9 @@ namespace PlanetInfoPlus
         // Units
         public static readonly string M = Localizer.Format("#autoLOC_7001411");
         public static readonly string KM = Localizer.Format("#autoLOC_7001405");
+        public static readonly string MM = Localizer.Format("#PlanetInfoPlus_megameters");
+        public static readonly string GM = Localizer.Format("#PlanetInfoPlus_gigameters");
+        public static readonly string TM = Localizer.Format("#PlanetInfoPlus_terameters");
         public static readonly string M2 = Localizer.Format("#autoLOC_7001402");
         public static readonly string KG = Localizer.Format("#autoLOC_7001403");
         public static readonly string M3_PER_S2 = Localizer.Format("#autoLOC_7001404");
@@ -50,6 +53,7 @@ namespace PlanetInfoPlus
         public static readonly string MAX_ELEVATION = Localizer.Format(Tags.MAX_ELEVATION);
         public static readonly string SYNCHRONOUS_ALTITUDE = Localizer.Format(Tags.SYNCHRONOUS_ALTITUDE);
         public static readonly string ORBITAL_PERIOD = Localizer.Format(Tags.ORBITAL_PERIOD);
+        public static readonly string SEMIMAJOR_AXIS = Localizer.Format(Tags.SEMIMAJOR_AXIS);
         public static readonly string LOCKED_ROTATION = Localizer.Format("#PlanetInfoPlus_lockedRotation");
         public static readonly string RETROGRADE_ROTATION = Localizer.Format("#PlanetInfoPlus_retrogradeRotation");
         public static readonly string LOCKED = Localizer.Format("#PlanetInfoPlus_locked");
@@ -111,6 +115,7 @@ namespace PlanetInfoPlus
             public const string MAX_ELEVATION = "#PlanetInfoPlus_maxElevation";
             public const string SYNCHRONOUS_ALTITUDE = "#PlanetInfoPlus_synchronousAltitude";
             public const string ORBITAL_PERIOD = "#PlanetInfoPlus_orbitalPeriod";
+            public const string SEMIMAJOR_AXIS = "#PlanetInfoPlus_semimajorAxis";
             public const string UPPER_ATMOSPHERE_HEIGHT = "#PlanetInfoPlus_upperAtmosphereHeight";
             public const string NEAR_SPACE_HEIGHT = "#PlanetInfoPlus_nearSpaceHeight";
             public const string BIOME_COUNT = "#PlanetInfoPlus_biomeCount";
